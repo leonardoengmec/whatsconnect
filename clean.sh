@@ -1,1 +1,1 @@
-find / -name 'axolotl.db' -exec rm -rf {} \;
+find / -xdev -name 'axolotl.db' -exec rm -rf {} \;

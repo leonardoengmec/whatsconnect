@@ -1,1 +1,5 @@
 blinker
+pymongo
+requests
+crontab
+chatterbot
