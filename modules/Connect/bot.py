@@ -2,6 +2,7 @@ from app.mac import mac, signals
 from modules.Connect import helper
 from modules.Connect import callouts
 import json
+import urllib
 
 @signals.message_received.connect
 def handle(message):
@@ -11,7 +12,8 @@ def handle(message):
     menuPedido = 2
     menuProduto = 3
     menuChat = 4
-    menuChatCanal = 5
+    menuChatPre = 5
+    menuChatPos = 6
 
     if message.text.lower() == 'menu':
         helper.cadastraEstado(message.who, menuInicial)
@@ -82,17 +84,26 @@ def handle(message):
     elif estado == 4:
         if message.text.lower() == '1':
                 resposta = retornaResposta('chat.pre',[])
-                helper.cadastraEstado(message.who, menuChatCanal)
+                helper.cadastraEstado(message.who, menuChatPre)
     
         elif message.text.lower() == '2':
                 resposta = retornaResposta('chat.pos',[])
-                helper.cadastraEstado(message.who, menuChatCanal)
+                helper.cadastraEstado(message.who, menuChatPos)
 
         mac.send_message(resposta, message.conversation)
 
     #Link do chat
     elif estado == 5:
-        var = [message.text]
+        #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
+        var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
+        resposta = retornaResposta('chat.link',var)
+        helper.cadastraEstado(message.who, menuNivel1)
+    
+        mac.send_message(resposta, message.conversation)
+
+    elif estado == 6:
+        #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
+        var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22','message.text',1]
         resposta = retornaResposta('chat.link',var)
         helper.cadastraEstado(message.who, menuNivel1)
     
@@ -149,7 +160,8 @@ def retornaResposta(opcao, variaveis):
         url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
         url += 'nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'.format(*variaveis)
 
-        resposta = "Clique no link para você entrar no chat! "
+        resposta = "Clique no link para você entrar no chat!\n"
+        resposta += url
 
     elif opcao == 'telefone.menu':
         resposta = "📞 (14) 3311-8100 📞\n\n"
