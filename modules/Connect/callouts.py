@@ -1,6 +1,6 @@
 import requests
 import json
-from modules.Connect import helper
+import helper
 
 def buscarPedido(numeroPedido):
 

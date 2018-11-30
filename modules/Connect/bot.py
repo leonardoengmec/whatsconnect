@@ -95,16 +95,16 @@ def handle(message):
     #Link do chat
     elif estado == 5:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
-        var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
-        resposta = retornaResposta('chat.link',var)
+        #var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
+        resposta = retornaResposta('chat.link',[])
         helper.cadastraEstado(message.who, menuNivel1)
     
         mac.send_message(resposta, message.conversation)
 
     elif estado == 6:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
-        var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22','message.text',1]
-        resposta = retornaResposta('chat.link',var)
+        #var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22','message.text',1]
+        resposta = retornaResposta('chat.link',[])
         helper.cadastraEstado(message.who, menuNivel1)
     
         mac.send_message(resposta, message.conversation)
@@ -143,7 +143,10 @@ def retornaResposta(opcao, variaveis):
         resposta = "Qual é o *ano* e *modelo* do seu carro/moto ?"
 
     elif opcao == 'vale.menu':
-        resposta = "Informações de vale-crédito."
+        resposta = "Acesse o nosso site, faça o seu login, selecione o produto desejado, adicione-o ao carrinho e clique em finalizar compra.\n"
+        resposta += "Selecione o botão fechar pedido e na etapa de pagamento selecione a opção adicionar vale-crédito.\n"
+        resposta += "Insira o código do vale no campo disponível e clique no botão adicionar. Se o valor do vale for igual ao do pedido, finalize o pedido."
+        resposta += "Caso contrário, selecione uma opção de pagamento para complementar o valor antes de finalizá-lo."
 
     elif opcao == 'chat.menu':
         resposta = "Ok! Para direcionar você para o atendente certo, digite o número do motivo sobre qual deseja falar:\n\n"
@@ -157,11 +160,12 @@ def retornaResposta(opcao, variaveis):
         resposta = "Ok, me informe o número do seu pedido."
         
     elif opcao == 'chat.link':
-        url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
-        url += 'nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'.format(*variaveis)
+        #url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
+        #url += 'nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'.format(*variaveis)
 
         resposta = "Clique no link para você entrar no chat!\n"
-        resposta += url
+        resposta += "(Falta o link)"
+        #resposta += url
 
     elif opcao == 'telefone.menu':
         resposta = "📞 (14) 3311-8100 📞\n\n"
