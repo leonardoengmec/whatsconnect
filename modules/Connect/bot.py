@@ -3,17 +3,20 @@ from modules.Connect import helper
 from modules.Connect import callouts
 import json
 import urllib
+import random
+
 
 @signals.message_received.connect
 def handle(message):
-
+    
     menuInicial = 0
     menuNivel1 = 1
     menuPedido = 2
-    menuProduto = 3
-    menuChat = 4
-    menuChatPre = 5
-    menuChatPos = 6
+    menuPromocoes = 3
+    menuProduto = 4
+    menuChat = 5
+    menuChatPre = 6
+    menuChatPos = 7
 
     if message.text.lower() == 'menu':
         helper.cadastraEstado(message.who, menuInicial)
@@ -21,13 +24,14 @@ def handle(message):
     estado = helper.procurarEstado(message.who)
     print("Mensagem: {0}".format(message))
     
-    if estado == 0:
-        resposta = retornaResposta('menu',[])
+    if estado == menuInicial:
+        var = [message.who_name]
+        resposta = retornaResposta('menu', var)
         mac.send_message(resposta, message.conversation)
         helper.cadastraEstado(message.who, menuNivel1)
     
     # Opções do menu
-    elif estado == 1:
+    elif estado == menuNivel1:
         # Opção 1 - Informação do pedido
         if message.text.lower() == '1':
             resposta = retornaResposta('pedido.menu',[])
@@ -59,13 +63,13 @@ def handle(message):
         mac.send_message(resposta, message.conversation)
     
     # Informações de pedido
-    elif estado == 2:
+    elif estado == menuPedido:
         
         resp = callouts.buscarPedido(message.text)
         
         if resp.status_code == 200:
             dadosPedido = json.loads(resp.text)          
-            var = [dadosPedido['CodigoExterno'],dadosPedido['Status']['Descricao'],dadosPedido['Transportadora']['ServicoEntrega']['NumerosRastreio'][0]]  
+            var = [dadosPedido['CodigoExterno'],validaStatus(dadosPedido['Status']['Descricao']),dadosPedido['Transportadora']['ServicoEntrega']['NumerosRastreio'][0]]  
             resposta = retornaResposta('pedido.dados',var)
             helper.cadastraEstado(message.who, menuNivel1)
         else:
@@ -73,15 +77,21 @@ def handle(message):
         
         mac.send_message(resposta, message.conversation)
         
+    # Promoções do site
+    elif estado == menuPromocoes:
+        resposta = retornaResposta('promocoes',[])
+        mac.send_message(resposta, message.conversation)
+        helper.cadastraEstado(message.who, menuNivel1)
+
     # Buscar produto no site
-    elif estado == 3:
+    elif estado == menuProduto:
         resposta = retornaResposta('produto.link',[])
         resposta += message.text.replace(" ","+")
         mac.send_message(resposta, message.conversation)
         helper.cadastraEstado(message.who, menuNivel1)
 
     # Entrar no chat
-    elif estado == 4:
+    elif estado == menuChat:
         if message.text.lower() == '1':
                 resposta = retornaResposta('chat.pre',[])
                 helper.cadastraEstado(message.who, menuChatPre)
@@ -93,47 +103,52 @@ def handle(message):
         mac.send_message(resposta, message.conversation)
 
     #Link do chat
-    elif estado == 5:
+    elif estado == menuChatPre:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
         #var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
         resposta = retornaResposta('chat.link',[])
         helper.cadastraEstado(message.who, menuNivel1)
-    
         mac.send_message(resposta, message.conversation)
 
-    elif estado == 6:
+    elif estado == menuChatPos:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
         #var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22','message.text',1]
         resposta = retornaResposta('chat.link',[])
         helper.cadastraEstado(message.who, menuNivel1)
-    
         mac.send_message(resposta, message.conversation)
 
     else:
         resposta = "Desculpe, mas não entendi a mensagem. "
         mac.send_message(resposta, message.conversation)
-
+    
+    
 
 
 def retornaResposta(opcao, variaveis):
     
     if opcao == 'menu':
-        resposta = "Olá! É um prazer falar com você. Veja as opções que tenho pra você:\n\n"
-        resposta += "1. Informação sobre um pedido. 📦\n"
+        lista = ["Olá {0}! Que legal falar com você. ".format(*variaveis), "Hey {0}, você por aqui? ".format(*variaveis)]
+        resposta = random.choice(lista)
+        resposta += "Posso te ajudar com as seguintes opções:\n\n"
+        resposta += "1. Informações sobre um pedido. 📦\n"
         resposta += "2. Procurar um produto no site. 🚗\n"
-        resposta += "3. Informação sobre como utilizar um vale-crédito ou cupom de desconto. 🎫\n"
-        resposta += "4. Falar com um atendente através do chat online. 💬\n"
-        resposta += "5. Ver nosso telefone de contato. 📞\n\n"
+        resposta += "3. Ver as promoções de hoje. 🎁\n"
+        resposta += "4. Informação sobre como utilizar um vale-crédito ou cupom de desconto. 🎫\n"
+        resposta += "5. Falar com um atendente através do chat online. 💬\n"
+        resposta += "6. Ver nosso telefone de contato. 📞\n\n"
         resposta += "Digite o número da opção desejada. 😉\n\n"
         resposta += "*DICA*: digite *MENU* a qualquer momento para rever essas opções."
     
     elif opcao == 'pedido.menu':
-        resposta = "Por favor, digite um número de pedido válido (ex: 17518648 ou 00K12345678)"
+        resposta = "Por favor, digite o número do seu pedido."
 
-    elif opcao == 'pedido.dados':        
+    elif opcao == 'promocoes':
+        resposta = "Confira nossas promoções neste link: *[LINK]*"
+
+    elif opcao == 'pedido.dados': 
         resposta = "*Pedido*: {0} \n"
         resposta += "*Status*: {1} \n"
-        resposta += "*Rastrear*: http://r.connectparts.com.br/?c={2}"
+        resposta += "*Rastreamento*: http://r.connectparts.com.br/?c={2}"
         resposta = resposta.format(*variaveis)
     
     elif opcao == 'pedido.naoLocalizado':
@@ -154,10 +169,10 @@ def retornaResposta(opcao, variaveis):
         resposta += "2. Falar sobre um pedido"
 
     elif opcao == 'chat.pre':
-        resposta = "Por favor, me fale o seu nome."
+        resposta = "Por favor, me fale o seu *nome*."
        
     elif opcao == 'chat.pos':
-        resposta = "Ok, me informe o número do seu pedido."
+        resposta = "Ok, me informe o *número* do seu pedido."
         
     elif opcao == 'chat.link':
         #url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
@@ -170,13 +185,19 @@ def retornaResposta(opcao, variaveis):
     elif opcao == 'telefone.menu':
         resposta = "📞 (14) 3311-8100 📞\n\n"
         resposta += "*Horário de atendimento:* \n"
-        resposta += "Seg á sex: 9hs às 18h\n"
-        resposta += "Sáb: 8hs às 14:15h\n"
+        resposta += "*Segunda à sexta-feira:* 9hs às 18h\n"
+        resposta += "*Sábado:* 8hs às 14:15h\n"
 
     elif opcao == 'produto.link':
         resposta = "Legal! Acesse o link para ver os produtos! https://busca.connectparts.com.br/busca?q="
 
     elif opcao == 'nenhumaOpcao':
-        resposta = "Desculpe, mas não tenho essa opção! Por favor, escolha uma opção do menu."
+        resposta = "Ahhh que pena, mas não tenho essa opção! 😥\nSe quiser ver as opções novamente, digite *menu*"
     
     return resposta
+
+def validaStatus(status):
+    if status == 'AGUARDANDO ESTOQUE' or status == 'ESTOQUE RESERVADO PARCIALMENTE':
+        return 'AGUARDANDO SEPARACAO DE MERCADORIAS'
+    else:
+        return status

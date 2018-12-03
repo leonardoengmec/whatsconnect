@@ -305,4 +305,3 @@ def on_upload_progress(self, filePath, jid, progress):
     return
     #sys.stdout.write("%s => %s, %d%% \r" % (os.path.basename(filePath), jid, progress))
     #sys.stdout.flush()
-
