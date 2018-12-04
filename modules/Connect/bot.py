@@ -10,13 +10,13 @@ import random
 def handle(message):
     
     menuInicial = 0
-    menuNivel1 = 1
-    menuPedido = 2
-    menuPromocoes = 3
-    menuProduto = 4
-    menuChat = 5
-    menuChatPre = 6
-    menuChatPos = 7
+    menuNivel1 = 99
+    menuPedido = 1
+    menuPromocoes = 2
+    menuProduto = 3
+    menuChat = 4
+    menuChatPre = 5
+    menuChatPos = 6
 
     if message.text.lower() == 'menu':
         helper.cadastraEstado(message.who, menuInicial)
@@ -105,15 +105,15 @@ def handle(message):
     #Link do chat
     elif estado == menuChatPre:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
-        #var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
-        resposta = retornaResposta('chat.link',[])
+        var = [message.text,'','Chat%20Online%20%22Realizar%20uma%20compra%22','',1]
+        resposta = retornaResposta('chat.link', var)
         helper.cadastraEstado(message.who, menuNivel1)
         mac.send_message(resposta, message.conversation)
 
     elif estado == menuChatPos:
         #nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'
-        #var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22','message.text',1]
-        resposta = retornaResposta('chat.link',[])
+        var = ['','','Chat%20Online%20%22Falar%20sobre%20seu%20pedido%22',message.text,1]
+        resposta = retornaResposta('chat.link', var)
         helper.cadastraEstado(message.who, menuNivel1)
         mac.send_message(resposta, message.conversation)
 
@@ -121,8 +121,6 @@ def handle(message):
         resposta = "Desculpe, mas não entendi a mensagem. "
         mac.send_message(resposta, message.conversation)
     
-    
-
 
 def retornaResposta(opcao, variaveis):
     
@@ -142,9 +140,6 @@ def retornaResposta(opcao, variaveis):
     elif opcao == 'pedido.menu':
         resposta = "Por favor, digite o número do seu pedido."
 
-    elif opcao == 'promocoes':
-        resposta = "Confira nossas promoções neste link: *[LINK]*"
-
     elif opcao == 'pedido.dados': 
         resposta = "*Pedido*: {0} \n"
         resposta += "*Status*: {1} \n"
@@ -152,14 +147,20 @@ def retornaResposta(opcao, variaveis):
         resposta = resposta.format(*variaveis)
     
     elif opcao == 'pedido.naoLocalizado':
-        resposta = "Pedido não localizado."
+        resposta = "Não localizei nenhum pedido com esse número. Pode digitar novamente?"
+
+    elif opcao == 'promocoes':
+        resposta = "Confira nossas promoções neste link: *[LINK]*"
 
     elif opcao == 'produto.menu':
         resposta = "Qual é o *ano* e *modelo* do seu carro/moto ?"
 
+    elif opcao == 'produto.link':
+        resposta = "Legal! Acesse o link para ver os produtos! https://busca.connectparts.com.br/busca?q="
+
     elif opcao == 'vale.menu':
-        resposta = "Acesse o nosso site, faça o seu login, selecione o produto desejado, adicione-o ao carrinho e clique em finalizar compra.\n"
-        resposta += "Selecione o botão fechar pedido e na etapa de pagamento selecione a opção adicionar vale-crédito.\n"
+        resposta = "Acesse o nosso site, faça o seu login, selecione o produto desejado, adicione-o ao carrinho e clique em finalizar compra.\n\n"
+        resposta += "Selecione o botão fechar pedido e na etapa de pagamento selecione a opção adicionar vale-crédito.\n\n"
         resposta += "Insira o código do vale no campo disponível e clique no botão adicionar. Se o valor do vale for igual ao do pedido, finalize o pedido."
         resposta += "Caso contrário, selecione uma opção de pagamento para complementar o valor antes de finalizá-lo."
 
@@ -175,24 +176,21 @@ def retornaResposta(opcao, variaveis):
         resposta = "Ok, me informe o *número* do seu pedido."
         
     elif opcao == 'chat.link':
-        #url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
-        #url += 'nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'.format(*variaveis)
+        url = 'https://connectparts.secure.force.com/AssistenteVirtual/ConectaChatLiveAgent?'
+        url += 'nome={0}&email={1}&canal={2}&pedido={3}&codigoBtn={4}'.format(*variaveis)
 
         resposta = "Clique no link para você entrar no chat!\n"
-        resposta += "(Falta o link)"
-        #resposta += url
+        #resposta += "(Falta o link)"
+        resposta += url
 
     elif opcao == 'telefone.menu':
         resposta = "📞 (14) 3311-8100 📞\n\n"
-        resposta += "*Horário de atendimento:* \n"
+        resposta += "*Horário de atendimento SAC:* \n"
         resposta += "*Segunda à sexta-feira:* 9hs às 18h\n"
         resposta += "*Sábado:* 8hs às 14:15h\n"
 
-    elif opcao == 'produto.link':
-        resposta = "Legal! Acesse o link para ver os produtos! https://busca.connectparts.com.br/busca?q="
-
     elif opcao == 'nenhumaOpcao':
-        resposta = "Ahhh que pena, mas não tenho essa opção! 😥\nSe quiser ver as opções novamente, digite *menu*"
+        resposta = "Ahhh que pena, mas não tenho essa opção! 😥\nSe quiser ver as opções novamente, digite *menu*."
     
     return resposta
 
