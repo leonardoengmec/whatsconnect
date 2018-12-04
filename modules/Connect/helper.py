@@ -7,10 +7,6 @@ tabela = banco['estados']
 acesso = banco['acesso']
 
 def cadastraEstado(telefone, estado):
-    contato = {}
-    contato["phone"] = telefone
-    contato["estado"] = estado
-    
     procurar = { "phone": telefone }
     novoValor = { "estado": estado }
 
@@ -33,8 +29,6 @@ def contar(numero):
     result = tabela.count_documents(queryStr)
     print('Telefones encontrados: {0}'.format(result))
     return result
-
-#def validaPedido(Npedido): 
 
 def cadastraToken(token):
     dadosToken = {}
@@ -66,3 +60,9 @@ def arrumaData(data):
 
     return data
     
+def cadastraVeiculo(telefone, veiculo):
+    procurar = { "phone": telefone }
+    novoValor = { "veiculo": veiculo }
+
+    x = tabela.update_one(procurar, {'$set': novoValor}, upsert=True)
+    print('Veículo inserido {0}'.format(x.matched_count))
