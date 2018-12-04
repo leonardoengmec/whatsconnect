@@ -65,4 +65,17 @@ def cadastraVeiculo(telefone, veiculo):
     novoValor = { "veiculo": veiculo }
 
     x = tabela.update_one(procurar, {'$set': novoValor}, upsert=True)
-    print('Veículo inserido {0}'.format(x.matched_count))
+    print('Veiculo inserido {0}'.format(x.matched_count))
+
+def syncContato(telefone, nome):
+    procurar = { "phone": telefone}
+    x = tabela.find(procurar)
+    telefone_certo = telefone.split('@')[0]
+
+    if x.count() == 0:
+        with open("../../config.py","r+") as f:
+            old = f.read()
+            f.seek(len(old)-1)
+            f.write('    "' + telefone_certo + '": "' + nome + '", \n}')
+        cadastraEstado(telefone,99)
+

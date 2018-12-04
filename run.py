@@ -8,6 +8,8 @@ from yowsup.layers.network import YowNetworkLayer
 
 from app.layer import MacLayer
 import pymongo
+import requests
+import threading
 
 # Uncomment to log
 logging.basicConfig(level=logging.DEBUG)
@@ -42,6 +44,20 @@ class MacStack(object):
         except KeyboardInterrupt:
             print("\nYowsdown")
             sys.exit(0)
+
+    def sincContacts(self):
+        r = requests
+        urlglobal = 'urlget'
+        pet = r.post(urlglobal+'getContactsBot')
+        contactsJSON = pet.json()
+        contacts = {
+        }
+        for contact in contactsJSON:
+            contacts.update({contact['tel_contact']:contact['nombre_contact']})
+
+        print(contacts)
+        # print(contacts.keys())
+        self.stack.setProp(MacLayer.PROP_CONTACTS,  list(contacts.keys()))
             
 def run_infinite():
     while True:
@@ -56,3 +72,13 @@ def run_infinite():
 if __name__ == "__main__":
     c = MacStack()
     c.start()
+
+def set_intervalContacts(sec):
+    def func_wrapper():
+        set_intervalContacts(sec) 
+        c.sincContacts()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
+set_intervalContacts(300)
