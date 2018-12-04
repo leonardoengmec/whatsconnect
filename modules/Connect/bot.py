@@ -44,16 +44,21 @@ def handle(message):
 
         # Opção 3 - Vale-crédito
         elif message.text.lower() == '3':
+            resposta = retornaResposta('promocoes',[])
+            helper.cadastraEstado(message.who, menuNivel1)
+
+        # Opção 3 - Vale-crédito
+        elif message.text.lower() == '4':
             resposta = retornaResposta('vale.menu',[])
             helper.cadastraEstado(message.who, menuNivel1)
 
         # Opção 4 - Atendimento no chat
-        elif message.text.lower() == '4':
+        elif message.text.lower() == '5':
             resposta = retornaResposta('chat.menu',[])
             helper.cadastraEstado(message.who, menuChat)
         
         # Opção 5 - Telefone
-        elif message.text.lower() == '5':
+        elif message.text.lower() == '6':
             resposta = retornaResposta('telefone.menu',[])
             helper.cadastraEstado(message.who, menuNivel1)
 
