@@ -52,8 +52,7 @@ def prepate_answer(self, conversation, message_length, disconnect_after=True):
 
     def get_delay(msg_len):
         # Measured seconds per character
-        rate = 0.2
-
+        rate = 0.05
         # Estimated time per human writing
         secs_to_write = rate * msg_len
         return secs_to_write + random.uniform(-2,2)
