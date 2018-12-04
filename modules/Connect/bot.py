@@ -25,6 +25,7 @@ def handle(message):
     print("Mensagem: {0}".format(message))
     
     if estado == menuInicial:
+        helper.syncContato(message.who, message.who_name)
         var = [message.who_name]
         resposta = retornaResposta('menu', var)
         mac.send_message(resposta, message.conversation)
