@@ -36,7 +36,7 @@ def receive_message(self, message_entity):
     ack_queue.append(message_entity)
 
 
-def prepate_answer(self, conversation, disconnect_after=True):
+def prepate_answer(self, conversation, message_length, disconnect_after=True):
     # Set name Presence
     make_presence(self)
 
@@ -49,11 +49,28 @@ def prepate_answer(self, conversation, disconnect_after=True):
 
     # Set is writing
     start_typing(self, conversation)
-    time.sleep(random.uniform(0.5, 1.4))
+
+    def get_delay(msg_len):
+        # Measured seconds per character
+        rate = 0.2
+
+        # Estimated time per human writing
+        secs_to_write = rate * msg_len
+        return secs_to_write + random.uniform(-2,2)
+
+    if message_length < 150:
+        time.sleep(get_delay(message_length))
+    else:
+        while message_length > 0:
+            time.sleep(get_delay(message_length))
+            message_length -= 150
+            stop_typing(self, conversation)
+            time.sleep(random.uniform(2,5))
+            start_typing(self, conversation)
 
     # Set it not writing
+    time.sleep(random.uniform(0.1, 0.3))
     stop_typing(self, conversation)
-    #time.sleep(random.uniform(0.1, 0.3))
     
     if disconnect_after:
         disconnect(self)
@@ -132,7 +149,7 @@ def send_message(str_message, conversation, disconnect_after=True):
     message = decode_string(str_message)
     
     # Prepare mac to answer (Human behavior)
-    prepate_answer(entity, conversation, disconnect_after)
+    prepate_answer(entity, conversation, len(message), disconnect_after)
     entity.toLower(helper.make_message(message, conversation))
     
 
