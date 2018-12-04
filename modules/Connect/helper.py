@@ -1,4 +1,5 @@
 import pymongo
+import os
 from datetime import datetime
 
 cliente = pymongo.MongoClient('mongodb://localhost:27017/')
@@ -73,7 +74,7 @@ def syncContato(telefone, nome):
     telefone_certo = telefone.split('@')[0]
 
     if x.count() == 0:
-        with open("../../config.py","r+") as f:
+        with open(os.path.abspath("../../config.py"),"r+") as f:
             old = f.read()
             f.seek(len(old)-1)
             f.write('    "' + telefone_certo + '": "' + nome + '", \n}')
