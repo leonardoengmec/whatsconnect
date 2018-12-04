@@ -94,6 +94,7 @@ def handle(message):
         resposta += message.text.replace(" ","+")
         mac.send_message(resposta, message.conversation)
         helper.cadastraEstado(message.who, menuNivel1)
+        helper.cadastraVeiculo(message.who, message.text)
 
     # Entrar no chat
     elif estado == menuChat:
