@@ -49,31 +49,14 @@ def prepate_answer(self, conversation, message_length, disconnect_after=True):
 
     # Set is writing
     start_typing(self, conversation)
-
-    def get_delay(msg_len):
-        # Measured seconds per character
-        rate = 0.05
-        # Estimated time per human writing
-        secs_to_write = rate * msg_len
-        return secs_to_write + random.uniform(-2,2)
-
-    if message_length < 150:
-        time.sleep(get_delay(message_length))
-    else:
-        while message_length > 0:
-            time.sleep(get_delay(message_length))
-            message_length -= 150
-            stop_typing(self, conversation)
-            time.sleep(random.uniform(2,5))
-            start_typing(self, conversation)
+    time.sleep(random.uniform(0.5, 1.4))
 
     # Set it not writing
-    time.sleep(random.uniform(0.1, 0.3))
     stop_typing(self, conversation)
+    #time.sleep(random.uniform(0.1, 0.3))
     
     if disconnect_after:
         disconnect(self)
-
 
 def make_presence(self):
     self.toLower(PresenceProtocolEntity(name=name))
