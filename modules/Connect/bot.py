@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from app.mac import mac, signals
 from modules.Connect import helper
 from modules.Connect import callouts
@@ -31,34 +33,34 @@ def handle(message):
         mac.send_message(resposta, message.conversation)
         helper.cadastraEstado(message.who, menuNivel1)
     
-    # Opções do menu
+    # Opcoeses do menu
     elif estado == menuNivel1:
-        # Opção 1 - Informação do pedido
+        # Opcao 1 - Informacao do pedido
         if message.text.lower() == '1':
             resposta = retornaResposta('pedido.menu',[])
             helper.cadastraEstado(message.who, menuPedido)
         
-        # Opção 2 - Produto no site (https://busca.connectparts.com.br/busca?q=)
+        # Opcao 2 - Produto no site (https://busca.connectparts.com.br/busca?q=)
         elif message.text.lower() == '2':
             resposta = retornaResposta('produto.menu',[])
             helper.cadastraEstado(message.who, menuProduto)
 
-        # Opção 3 - Vale-crédito
+        # Opcao 3 - Vale-credito
         elif message.text.lower() == '3':
             resposta = retornaResposta('promocoes',[])
             helper.cadastraEstado(message.who, menuNivel1)
 
-        # Opção 3 - Vale-crédito
+        # Opcao 3 - Vale-credito
         elif message.text.lower() == '4':
             resposta = retornaResposta('vale.menu',[])
             helper.cadastraEstado(message.who, menuNivel1)
 
-        # Opção 4 - Atendimento no chat
+        # Opcao 4 - Atendimento no chat
         elif message.text.lower() == '5':
             resposta = retornaResposta('chat.menu',[])
             helper.cadastraEstado(message.who, menuChat)
         
-        # Opção 5 - Telefone
+        # Opcao 5 - Telefone
         elif message.text.lower() == '6':
             resposta = retornaResposta('telefone.menu',[])
             helper.cadastraEstado(message.who, menuNivel1)
@@ -68,7 +70,7 @@ def handle(message):
         
         mac.send_message(resposta, message.conversation)
     
-    # Informações de pedido
+    # Informacoes de pedido
     elif estado == menuPedido:
         
         resp = callouts.buscarPedido(message.text)
@@ -83,7 +85,7 @@ def handle(message):
         
         mac.send_message(resposta, message.conversation)
         
-    # Promoções do site
+    # Promocoes do site
     elif estado == menuPromocoes:
         resposta = retornaResposta('promocoes',[])
         mac.send_message(resposta, message.conversation)
@@ -125,7 +127,7 @@ def handle(message):
         mac.send_message(resposta, message.conversation)
 
     else:
-        resposta = "Desculpe, mas não entendi a mensagem. "
+        resposta = "Desculpe, mas nao entendi a mensagem. "
         mac.send_message(resposta, message.conversation)
     
 
@@ -134,15 +136,15 @@ def retornaResposta(opcao, variaveis):
     if opcao == 'menu':
         lista = ["Olá {0}! Que legal falar com você. ".format(*variaveis), "Hey {0}, você por aqui? ".format(*variaveis)]
         resposta = random.choice(lista)
-        resposta += "Posso te ajudar com as seguintes opções:\n\n"
-        resposta += "1. Informações sobre um pedido. 📦\n"
+        resposta += "Posso te ajudar com as seguintes opcões:\n\n"
+        resposta += "1. Informacões sobre um pedido. 📦\n"
         resposta += "2. Procurar um produto no site. 🚗\n"
-        resposta += "3. Ver as promoções de hoje. 🎁\n"
-        resposta += "4. Informação sobre como utilizar um vale-crédito ou cupom de desconto. 🎫\n"
+        resposta += "3. Ver as promocões de hoje. 🎁\n"
+        resposta += "4. Informacao sobre como utilizar um vale-crédito ou cupom de desconto. 🎫\n"
         resposta += "5. Falar com um atendente através do chat online. 💬\n"
         resposta += "6. Ver nosso telefone de contato. 📞\n\n"
-        resposta += "Digite o número da opção desejada. 😉\n\n"
-        resposta += "*DICA*: digite *MENU* a qualquer momento para rever essas opções."
+        resposta += "Digite o número da opcao desejada. 😉\n\n"
+        resposta += "*DICA*: digite *MENU* a qualquer momento para rever essas opcões."
     
     elif opcao == 'pedido.menu':
         resposta = "Por favor, digite o número do seu pedido."
@@ -154,10 +156,10 @@ def retornaResposta(opcao, variaveis):
         resposta = resposta.format(*variaveis)
     
     elif opcao == 'pedido.naoLocalizado':
-        resposta = "Não localizei nenhum pedido com esse número. Pode digitar novamente?"
+        resposta = "Nao localizei nenhum pedido com esse número. Pode digitar novamente?"
 
     elif opcao == 'promocoes':
-        resposta = "Confira nossas promoções neste link: https://www.connectparts.com.br/cupons-de-desconto"
+        resposta = "Confira nossas promocões neste link: https://www.connectparts.com.br/cupons-de-desconto"
 
     elif opcao == 'produto.menu':
         resposta = "Qual é o *ano* e *modelo* do seu carro/moto ?"
@@ -166,10 +168,10 @@ def retornaResposta(opcao, variaveis):
         resposta = "Legal! Acesse o link para ver os produtos! https://busca.connectparts.com.br/busca?q="
 
     elif opcao == 'vale.menu':
-        resposta = "Acesse o nosso site, faça o seu login, selecione o produto desejado, adicione-o ao carrinho e clique em finalizar compra.\n\n"
-        resposta += "Selecione o botão fechar pedido e na etapa de pagamento selecione a opção adicionar vale-crédito.\n\n"
-        resposta += "Insira o código do vale no campo disponível e clique no botão adicionar. Se o valor do vale for igual ao do pedido, finalize o pedido."
-        resposta += "Caso contrário, selecione uma opção de pagamento para complementar o valor antes de finalizá-lo."
+        resposta = "Acesse o nosso site, faca o seu login, selecione o produto desejado, adicione-o ao carrinho e clique em finalizar compra.\n\n"
+        resposta += "Selecione o botao fechar pedido e na etapa de pagamento selecione a opcao adicionar vale-crédito.\n\n"
+        resposta += "Insira o código do vale no campo disponível e clique no botao adicionar. Se o valor do vale for igual ao do pedido, finalize o pedido."
+        resposta += "Caso contrário, selecione uma opcao de pagamento para complementar o valor antes de finalizá-lo."
 
     elif opcao == 'chat.menu':
         resposta = "Ok! Para direcionar você para o atendente certo, digite o número do motivo sobre qual deseja falar:\n\n"
@@ -197,7 +199,7 @@ def retornaResposta(opcao, variaveis):
         resposta += "*Sábado:* 8hs às 14:15h\n"
 
     elif opcao == 'nenhumaOpcao':
-        resposta = "Ahhh que pena, mas não tenho essa opção! 😥\nSe quiser ver as opções novamente, digite *menu*."
+        resposta = "Ahhh que pena, mas nao tenho essa opcao! 😥\nSe quiser ver as opcões novamente, digite *menu*."
     
     return resposta
 

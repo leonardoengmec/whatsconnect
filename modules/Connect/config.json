@@ -1,4 +1,8 @@
 {
 	"user": "leonardo.santos@connectparts.com.br",
-	"pass": "Connect"
+	"pass": "Connect",
+	"SLF_clientId": "3MVG9PbQtiUzNgN5HOnTahCd6Gc00kdQiU1Rc.FBiynuVHv0I85YzEQtGZ6CuXPQD4LqCdeFNXngRDLr_tafg",
+	"SLF_clientSecret": "6597360502182167311",
+	"SLF_user": "processos.salesforce@connectparts.com.br.sandboxdev", 
+	"SLF_pass": "Connect#processos2017bMV0VqEiUGUCoC7VRRCe1zjln"
 }

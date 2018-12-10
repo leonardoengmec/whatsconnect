@@ -6,6 +6,7 @@ cliente = pymongo.MongoClient('mongodb://localhost:27017/')
 banco = cliente['contatosRealizados']
 tabela = banco['estados']
 acesso = banco['acesso']
+salesforce = banco['salesforce']
 
 def cadastraEstado(telefone, estado):
     procurar = { "phone": telefone }
@@ -40,8 +41,20 @@ def cadastraToken(token):
     for i in acesso.find():
         print(i)
 
+def cadastraTokenSalesforce(token):
+    dadosToken = {}
+    dadosToken["token"] = token
+    salesforce.drop()
+    salesforce.insert_one(dadosToken)
+    
+    for i in salesforce.find():
+        print(i)
+
 def recuperaToken():
     return acesso.find_one()['token']  
+
+def recuperaTokenSalesforce():
+    return salesforce.find_one()['token']  
 
 def arrumaData(data):
     #Thu, 29 Nov 2018 20:11:05 GMT

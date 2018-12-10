@@ -1,6 +1,6 @@
 import requests
 import json
-from modules.Connect import helper
+import modules.Connect.helper
 
 def buscarPedido(numeroPedido):
 
@@ -11,9 +11,28 @@ def buscarPedido(numeroPedido):
     r = requests.get(url, headers=headers)
     print(r.json)
     return r
-    
-    
-    #return json.loads(r.json)
 
-    #
-    #http://api.dakotaparts.com.br/fenix/Pedido/Buscar?codigoExterno=00K45286189&ignorarCancelados=false
+def enviaMensagemSalesforce(idwhats, mensagem):
+
+    token = helper.recuperaTokenSalesforce()
+    
+    urlSalesforce = 'https://cs51.salesforce.com/services/apexrest/whatsapp/'
+    headers = {'Authorization': 'OAuth {0}'.format(token), 'Content-Type': 'application/json'}
+    
+    data = {"idWhats": idwhats,
+            "mensagem": mensagem}
+    print(data)
+    data = json.dumps(data)
+    r = requests.post(urlSalesforce, headers=headers, data=data)
+    print(r.text)
+    
+def retornaMensagemSalesforce():
+
+    token = helper.recuperaTokenSalesforce()
+    urlSalesforce = 'https://cs51.salesforce.com/services/apexrest/whatsapp/'
+    headers = {'Authorization': 'OAuth {0}'.format(token), 'Content-Type': 'application/json'}
+    
+    r = requests.get(urlSalesforce, headers=headers)
+    print(r.text)
+    return r
+    
