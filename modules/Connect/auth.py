@@ -1,6 +1,6 @@
 import requests
 import json
-import helper
+from modules.Connect import helper
 from datetime import datetime
 
 with open('config.json') as f:

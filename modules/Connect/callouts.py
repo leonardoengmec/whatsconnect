@@ -1,6 +1,6 @@
 import requests
 import json
-import modules.Connect.helper
+from modules.Connect import helper
 
 def buscarPedido(numeroPedido):
 
@@ -34,5 +34,6 @@ def retornaMensagemSalesforce():
     
     r = requests.get(urlSalesforce, headers=headers)
     print(r.text)
-    return r
+    j = json.loads(r.text)
+    return j
     

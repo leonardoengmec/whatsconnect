@@ -1,5 +1,5 @@
-from app.mac import mac, signals
-import callouts
+#from app.mac import mac, signals
+from modules.Connect import callouts
 import os
 
 if __name__ == "__main__":
