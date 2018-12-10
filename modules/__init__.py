@@ -1,7 +1,7 @@
 # Add here the modules you want to enable here
 
 from modules.Connect import bot
-from modules.Connect import comandos
+#from modules.Connect import comandos
 from modules.Connect import helper
 from modules.Connect import callouts
 import pymongo

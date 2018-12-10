@@ -10,9 +10,10 @@ from app.layer import MacLayer
 import pymongo
 import requests
 import threading
+import comandos
 
 # Uncomment to log
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 # Config
 credentials = (config.credentials['phone'], config.credentials['password'])
@@ -44,7 +45,7 @@ class MacStack(object):
         except KeyboardInterrupt:
             print("\nYowsdown")
             sys.exit(0)
-
+'''
     def sincContacts(self):
         r = requests
         urlglobal = 'urlget'
@@ -58,21 +59,25 @@ class MacStack(object):
         print(contacts)
         # print(contacts.keys())
         self.stack.setProp(MacLayer.PROP_CONTACTS,  list(contacts.keys()))
-            
+      '''      
 def run_infinite():
     while True:
         try:
             c = MacStack()
             c.start()
+            comandos.enviaMensagensSalesforce('')
+            print('run_infinite do run.py')
         except:
             pass
         else:
             break
 
 if __name__ == "__main__":
+    print('main do run.py')
     c = MacStack()
     c.start()
-
+    comandos.enviaMensagensSalesforce('')
+    '''
 def set_intervalContacts(sec):
     def func_wrapper():
         set_intervalContacts(sec) 
@@ -81,4 +86,4 @@ def set_intervalContacts(sec):
     t.start()
     return t
 
-set_intervalContacts(300)
+set_intervalContacts(300)'''
