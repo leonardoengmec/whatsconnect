@@ -157,7 +157,7 @@ def retornaResposta(opcao, variaveis):
         resposta = "Não localizei nenhum pedido com esse número. Pode digitar novamente?"
 
     elif opcao == 'promocoes':
-        resposta = "Confira nossas promoções neste link: *[LINK]*"
+        resposta = "Confira nossas promoções neste link: https://www.connectparts.com.br/cupons-de-desconto"
 
     elif opcao == 'produto.menu':
         resposta = "Qual é o *ano* e *modelo* do seu carro/moto ?"
