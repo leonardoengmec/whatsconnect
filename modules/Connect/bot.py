@@ -7,7 +7,6 @@ import json
 import urllib
 import random
 
-
 @signals.message_received.connect
 def handle(message):
     

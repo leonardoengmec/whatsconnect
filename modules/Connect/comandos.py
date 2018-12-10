@@ -1,11 +1,10 @@
-#from app.mac import mac, signals
+from app.mac import mac, signals
 from modules.Connect import callouts
 import os
 
-if __name__ == "__main__":
-	enviaMensagensSalesforce()
+@signals.initialized.connect
+def handle(entity):
 
-def enviaMensagensSalesforce():
 	listaMensagem = callouts.retornaMensagemSalesforce()
 	for msg in listaMensagem:	
 		# aqui entraria o rabbitMQ

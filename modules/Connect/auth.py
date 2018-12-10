@@ -1,9 +1,9 @@
 import requests
 import json
-from modules.Connect import helper
+import helper
 from datetime import datetime
 
-with open('config.json') as f:
+with open('./modules/Connect/config.json') as f:
     config = json.load(f)
 
 urlSIGECO = 'http://api.dakotaparts.com.br/OAuth/Token?username={0}&password={1}'.format(config['user'], config['pass'])
