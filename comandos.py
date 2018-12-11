@@ -11,7 +11,7 @@ def enviaMensagensSalesforce(texto):
 		# aqui entraria o rabbitMQ
 		#mac.send_message_to('mensagem', 'telefone')
 		mac.send_message_to(msg['mensagem__c'],msg['Name'])
-		setTimeOut(10) # 5 seconds
+	setTimeOut(10) # 5 seconds
 
 def setTimeOut(sec):
 	print('Rodou envia mensagens salesforce!!!')
