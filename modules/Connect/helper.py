@@ -87,7 +87,7 @@ def syncContato(telefone, nome):
     telefone_certo = telefone.split('@')[0]
 
     if x.count() == 0:
-        with open(os.path.abspath("../../config.py"),"r+") as f:
+        with open(os.path.abspath("./config.py"),"r+") as f:
             old = f.read()
             f.seek(len(old)-1)
             f.write('    "' + telefone_certo + '": "' + nome + '", \n}')
